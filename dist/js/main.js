@@ -7,7 +7,7 @@ const initApp = () => {
 
     const prevents = (e) => e.preventDefault();
     
-    ['dragenter','dragover','dragleave','drop'].forEach(evtName => {
+    ['dragover','drop'].forEach(evtName => {
     dropArea.addEventListener(evtName, prevents);
     });
 
@@ -29,6 +29,16 @@ const handleDrop = (event) => {
     const dt = event.dataTransfer;
     const files = dt.files;
     const fileArray = [...files];
-    console.log(files);
-    console.log(fileArray);
+    if (fileArray.length > 20) return alert("Too many files!");
+    handleFiles(fileArray);
+}
+
+const handleFiles = (fileArray) => {
+    fileArray.forEach(file => {
+        const fileID = // counter
+        // increment
+        if (((file.size / 1024) / 1024) > 4) return alert("File size too large.");
+        createResult(file, fileID);
+        uploadFile(file, fileID)
+    });
 }
