@@ -1,3 +1,6 @@
+import Counter from "./counter.js";
+const counter = new Counter();
+
 const initApp = () => {
     const dropArea = document.querySelector('.dropArea');
 
@@ -35,8 +38,8 @@ const handleDrop = (event) => {
 
 const handleFiles = (fileArray) => {
     fileArray.forEach(file => {
-        const fileID = // counter
-        // increment
+        const fileID = counter.getValue();
+        counter.incrementValue();
         if (((file.size / 1024) / 1024) > 4) return alert("File size too large.");
         createResult(file, fileID);
         uploadFile(file, fileID)
