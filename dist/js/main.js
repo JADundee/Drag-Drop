@@ -172,3 +172,9 @@ const populateResult = (file, fileID, imgJson) => {
     const saved = document.getElementById(`saved_${file.name}_${fileID}`);
     saved.textContent = `-${Math.round(percentSaved)}%`;
 }
+
+const getPercentSaved = (originalFileSize, newFileSize) => {
+    const ogFileSize = parseFloat(originalFileSize);
+    const newFS = parseFloat(newFileSize);
+    return ((ogFileSize - newFS) / ogFileSize) * 100;
+}
