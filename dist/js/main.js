@@ -178,3 +178,12 @@ const getPercentSaved = (originalFileSize, newFileSize) => {
     const newFS = parseFloat(newFileSize);
     return ((ogFileSize - newFS) / ogFileSize) * 100;
 }
+
+const createDownloadLink = (imgJson) =>  {
+    const extension = (imgJson.filename).split('.').pop();
+    const link = document.createElement('a');
+    link.href = `data:image/${extension};base64,${imgJson.base64String}`;
+    link.download = imgJson.filename;
+    link.textContent = "download";
+    return link;
+}
