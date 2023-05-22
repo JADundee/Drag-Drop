@@ -1,4 +1,4 @@
-import Counter from "./counter.js";
+import Counter from "./Counter.js";
 const counter = new Counter();
 
 const initApp = () => {
@@ -40,9 +40,9 @@ const handleFiles = (fileArray) => {
     fileArray.forEach(file => {
         const fileID = counter.getValue();
         counter.incrementValue();
-        if (((file.size / 1024) / 1024) > 4) return alert("File size too large.");
+        if (file.size > 4 * 1024 * 1024) return alert("File size too large.");
         createResult(file, fileID);
-        uploadFile(file, fileID)
+        uploadFile(file, fileID);
     });
 }
 
@@ -64,13 +64,13 @@ const createResult = (file, fileID) => {
 
     const progress = document.createElement("progress");
     progress.id = `progress_${file.name}_${fileID}`;
-    progress.className = "results__bar"
+    progress.className = "results__bar";
     progress.max = 10;
     progress.value = 0;
 
     const p3 = document.createElement("p");
     p3.id = `new_size_${file.name}_${fileID}`;
-    p3.className = "results__saved";
+    p3.className = "results__size";
 
     const p4 = document.createElement("p");
     p4.id = `download_${file.name}_${fileID}`;
@@ -95,12 +95,12 @@ const createResult = (file, fileID) => {
     li.appendChild(divTwo);
 
     document.querySelector('.results__list').appendChild(li);
-    displayResults()
+    displayResults();
 }
 
-const getFileSizeString = (filesize) =>  {
+const getFileSizeString = (filesize) => {
     const sizeInKB = parseFloat(filesize) / 1024;
-    const sizeInMB = ((parseFloat(filesize) / 1024) / 1024);
+    const sizeInMB = (sizeInKB / 1024);
     return sizeInKB > 1024 ? `${sizeInMB.toFixed(1)} MB` : `${sizeInKB.toFixed(1)} KB`;
 }
 
@@ -125,8 +125,7 @@ const uploadFile = (file, fileID) => {
         try {
             const fileStream = await fetch(url, {
                 method: "POST",
-                body: JSON.stringify(body),
-                isBase64Encoded: true
+                body: JSON.stringify(body)
             });
 
             const imgJson = await fileStream.json();
@@ -147,10 +146,10 @@ const handleFileError = (filename, fileID) => {
 }
 
 const updateProgressBar = (file, fileID, imgJson) => {
-    const progress= document.getElementById(`progress_${file.name}_${fileID}`);
+    const progress = document.getElementById(`progress_${file.name}_${fileID}`);
     const addProgress = setInterval(() => {
         progress.value += 1;
-        if(progress.value === 10) {
+        if (progress.value === 10) {
             clearInterval(addProgress);
             progress.classList.add('finished');
             populateResult(file, fileID, imgJson);
@@ -170,7 +169,7 @@ const populateResult = (file, fileID, imgJson) => {
     download.appendChild(link);
 
     const saved = document.getElementById(`saved_${file.name}_${fileID}`);
-    saved.textContent = `-${Math.round(percentSaved)}%`;
+    saved.textContent = `−${Math.round(percentSaved)}%`;
 }
 
 const getPercentSaved = (originalFileSize, newFileSize) => {
@@ -179,10 +178,10 @@ const getPercentSaved = (originalFileSize, newFileSize) => {
     return ((ogFileSize - newFS) / ogFileSize) * 100;
 }
 
-const createDownloadLink = (imgJson) =>  {
+const createDownloadLink = (imgJson) => {
     const extension = (imgJson.filename).split('.').pop();
     const link = document.createElement('a');
-    link.href = `data:image/${extension};base64,${imgJson.base64String}`;
+    link.href = `data:image/${extension};base64,${imgJson.base64CompString}`;
     link.download = imgJson.filename;
     link.textContent = "download";
     return link;
