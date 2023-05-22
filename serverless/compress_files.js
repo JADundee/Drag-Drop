@@ -9,7 +9,7 @@ exports.handler = async (event, context) => {
     const filename = `${name}.${extension}`;
 
     try {
-        const result = buffer.from(base64Image, 'base64');
+        const result = Buffer.from(base64Image, 'base64');
         const newImgBuffer = await imagemin.buffer(result, {
             destination: 'serverless/compress_files', 
             plugins: [ 
@@ -25,10 +25,10 @@ exports.handler = async (event, context) => {
 
         const filesize = newImgBuffer.length;
         const base64CompString = newImgBuffer.toString('base64');
-        const imgDataObj = { base64CompString, filename, filesize };
+        const imageDataObj = { base64CompString, filename, filesize };
         return {
             statusCode: 200,  
-            body: JSON.stringify(imgDataObj)
+            body: JSON.stringify(imageDataObj)
         }
     } catch (err) {
         return {
